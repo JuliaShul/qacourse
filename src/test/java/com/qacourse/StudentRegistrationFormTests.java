@@ -1,8 +1,12 @@
 package com.qacourse;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pages.RegistrationPage;
+
+import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -11,9 +15,11 @@ import static com.codeborne.selenide.Selenide.open;
 class StudentRegistrationFormTests {
 
     private static final String USER_REGISTRATION_FORM_URL = "https://demoqa.com/automation-practice-form";
+    private RegistrationPage registrationPage = new RegistrationPage();
+    private Faker faker = new Faker(Locale.GERMANY);
 
-    @BeforeAll
-    static void openWebsite() {
+    @BeforeEach
+    void openWebsite() {
         Configuration.browser = "chrome";
         open(USER_REGISTRATION_FORM_URL);
     }
@@ -43,6 +49,35 @@ class StudentRegistrationFormTests {
         $("#submit").scrollTo().click();
 
         $(".table").shouldHave(text(firstName), text(lastName), text(email), text(gender), text(number),
+                text("13 August,2000"), text(address));
+    }
+
+    @Test
+    void registerStudentWithPageObject() {
+        String firstName = faker.name().firstName(),
+                lastName = faker.name().lastName(),
+                gender = "Male",
+                email = faker.internet().emailAddress(),
+                month = "August",
+                year = "2000",
+                number = faker.phoneNumber().subscriberNumber(10),
+                address = faker.address().fullAddress();
+
+        registrationPage.typeFirstname(firstName);
+        registrationPage.typeLastname(lastName);
+        registrationPage.typeUserEmail(email);
+        registrationPage.chooseGender(gender);
+        registrationPage.typeUserNumber(number);
+        registrationPage.setDate(month, year);
+        registrationPage.chooseHobby();
+        registrationPage.typeAddress(address);
+        registrationPage.clickSubmitButton();
+
+        $(".table").shouldHave(text(firstName),
+                text(lastName),
+                text(email),
+                text(gender),
+                text(number),
                 text("13 August,2000"), text(address));
     }
 }
