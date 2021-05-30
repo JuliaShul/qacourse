@@ -3,14 +3,16 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.open;
 
 public class RegistrationPage {
+
+    private static final String USER_REGISTRATION_FORM_URL = "https://demoqa.com/automation-practice-form";
 
     private SelenideElement firstNameInput = $("#firstName"),
             lastNameInput = $("#lastName"),
             userEmailInput = $("#userEmail"),
-            maleGenderRadioButton = $("#gender-radio-1").parent(),
-            femaleGenderRadioButton = $("#gender-radio-2").parent(),
             userNumberInput = $("#userNumber"),
             addressInput = $("#currentAddress");
 
@@ -27,13 +29,8 @@ public class RegistrationPage {
     }
 
     public void chooseGender(String gender) {
-        if ("Male".equals(gender)) {
-            maleGenderRadioButton.click();
-        } else if ("Female".equals(gender)) {
-            femaleGenderRadioButton.click();
-        } else if ("Other".equals(gender)) {
-            throw new IllegalArgumentException("");
-        }
+        String selectedGender = String.format("//input[@value='%s']", gender);
+        $x(selectedGender).parent().click();
     }
 
     public void typeUserNumber(String userNumber) {
@@ -57,5 +54,9 @@ public class RegistrationPage {
 
     public void clickSubmitButton() {
         $("#submit").scrollTo().click();
+    }
+
+    public void openRegisterPage() {
+        open(USER_REGISTRATION_FORM_URL);
     }
 }

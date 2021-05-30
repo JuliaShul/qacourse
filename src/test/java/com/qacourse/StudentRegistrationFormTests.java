@@ -10,18 +10,16 @@ import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 
 class StudentRegistrationFormTests {
 
-    private static final String USER_REGISTRATION_FORM_URL = "https://demoqa.com/automation-practice-form";
     private RegistrationPage registrationPage = new RegistrationPage();
     private Faker faker = new Faker(Locale.GERMANY);
 
     @BeforeEach
     void openWebsite() {
         Configuration.browser = "chrome";
-        open(USER_REGISTRATION_FORM_URL);
+        registrationPage.openRegisterPage();
     }
 
     @Test
