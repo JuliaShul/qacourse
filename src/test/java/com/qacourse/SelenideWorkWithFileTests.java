@@ -32,7 +32,7 @@ class SelenideWorkWithFileTests {
 
     @Test
     void downloadFileTest() throws FileNotFoundException {
-        String actualTitle = "cypress-allure-plugin";
+        final String actualTitle = "cypress-allure-plugin";
 
         open("https://github.com/Shelex/cypress-allure-plugin/blob/master/README.md");
         File downloadedFile = $("#raw-url").download();
@@ -43,7 +43,7 @@ class SelenideWorkWithFileTests {
 
     @Test
     void readTxtFileTest() {
-        String filePath = "src/test/resources/file.txt",
+        final String filePath = "src/test/resources/file.txt",
                 actualData = "The first program that usually beginners create is Hello world.";
 
         String fileContent = CustomFileManager.readTextFromPath(filePath).get();
@@ -53,7 +53,7 @@ class SelenideWorkWithFileTests {
 
     @Test
     void readPdfFileTest() {
-        String pdfFilePath = "src/test/resources/Quick Start.pdf",
+        final String pdfFilePath = "src/test/resources/Quick Start.pdf",
                 actualData = "For Maven users";
 
         PDF pdfContent = CustomFileManager.getPdf(pdfFilePath).get();
@@ -64,7 +64,7 @@ class SelenideWorkWithFileTests {
 
     @Test
     void readXlsxFileTest() {
-        String pdfFilePath = "src/test/resources/test.xlsx",
+        final String pdfFilePath = "src/test/resources/test.xlsx",
                 actualData = "igor@email.com";
 
         XLS xlsContent = CustomFileManager.getXls(pdfFilePath);
@@ -79,7 +79,7 @@ class SelenideWorkWithFileTests {
 
     @Test
     void zipWithPasswordTest() throws ZipException {
-        String zipFilePath = "./src/test/resources/Quick_Start.zip",
+        final String zipFilePath = "./src/test/resources/Quick_Start.zip",
                 unzipFolderPath = "./src/test/resources/unzip",
                 zipPassword = "123",
                 unzipPdfFilePath = "./src/test/resources/unzip/Quick Start.pdf",
@@ -88,5 +88,23 @@ class SelenideWorkWithFileTests {
         CustomFileManager.unzip(zipFilePath, unzipFolderPath, zipPassword);
 
         assertThat(CustomFileManager.getPdf(unzipPdfFilePath).get(), PDF.containsText(text));
+    }
+
+    @Test
+    void readDocFile() {
+        final String docFilePath = "./src/test/resources/1.doc",
+                expectedData = "elephants go north";
+
+        String actualText = CustomFileManager.readDocFile(docFilePath);
+        assertThat(actualText, containsString(expectedData));
+    }
+
+    @Test
+    void readDocxFile() {
+        final String docFilePath = "./src/test/resources/TestDocFile.docx",
+                expectedData = "There is some text.";
+
+        String actualData = CustomFileManager.readDocxFile(docFilePath);
+        assertThat(actualData, containsString(expectedData));
     }
 }

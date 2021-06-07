@@ -20,6 +20,8 @@ ext {
     xlsTestVersion = "1.4.3"
     zip4jVersion = "1.3.2"
     hamcrestVersion = "1.3"
+    poiVersion = "5.0.0"
+    codecVersion = "1.15"
 }
 
 tasks.withType(JavaCompile) {
@@ -38,10 +40,16 @@ dependencies {
             "com.codeborne:pdf-test:${pdfTestVersion}",
             "com.codeborne:xls-test:${xlsTestVersion}",
             "net.lingala.zip4j:zip4j:${zip4jVersion}",
-            "org.hamcrest:hamcrest-all:${hamcrestVersion}")
-
+            "org.hamcrest:hamcrest-all:${hamcrestVersion}",
+            "org.apache.poi:poi:${poiVersion}",
+            "org.apache.poi:poi-scratchpad:${poiVersion}",
+            "org.apache.poi:poi-ooxml:${poiVersion}",
+            "org.apache.poi:poi-ooxml-full:${poiVersion}",
+            "commons-codec:commons-codec:${codecVersion}"
+    )
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
+
 allure {
     version = "${allureVersion}"
     aspectjweaver = true

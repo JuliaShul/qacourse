@@ -5,14 +5,19 @@ import com.codeborne.xlstest.XLS;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -75,51 +80,52 @@ public class CustomFileManager {
         }
     }
 
-    public static String readXlsxFromPath(String path) {
-        String result = "";
-        XSSFWorkbook myExcelBook = null;
 
+    public static String readDocFile(String filePath) {
+
+        File file = new File(filePath);
+
+        FileInputStream fis = null;
         try {
-            myExcelBook = new XSSFWorkbook(new FileInputStream(path));
+            fis = new FileInputStream(file.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        HWPFDocument doc = null;
+        try {
+            doc = new HWPFDocument(fis);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        XSSFSheet myExcelSheet = myExcelBook.getSheetAt(0);
-        Iterator<Row> rows = myExcelSheet.iterator();
+        WordExtractor we = new WordExtractor(doc);
 
-        while (rows.hasNext()) {
-            Row row = rows.next();
-            Iterator<Cell> cells = row.iterator();
-            while (cells.hasNext()) {
-                Cell cell = cells.next();
-                CellType cellType = cell.getCellType();
-                //перебираем возможные типы ячеек
-                switch (cellType) {
-//                    case Cell.CELL_TYPE_STRING:
-//                        result += cell.getStringCellValue() + "=";
-//                        break;
-//                    case Cell.CELL_TYPE_NUMERIC:
-//                        result += "[" + cell.getNumericCellValue() + "]";
-//                        break;
-//
-//                    case Cell.CELL_TYPE_FORMULA:
-//                        result += "[" + cell.getNumericCellValue() + "]";
-//                        break;
-                    default:
-                        result += cell.toString();
-                        break;
-                }
-            }
+
+        return we.getText();
+    }
+
+        public static String readDocxFile(String fileName) {
+
+        File file = new File(fileName);
+
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
+        XWPFDocument docx = null;
         try {
-            myExcelBook.close();
+            docx = new XWPFDocument(fis);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return result;
+        XWPFWordExtractor extractor = new XWPFWordExtractor(docx);
+
+        return extractor.getText();
     }
 
 }
