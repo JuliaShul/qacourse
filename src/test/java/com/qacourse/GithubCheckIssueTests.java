@@ -18,6 +18,8 @@ class GithubCheckIssueTests {
     private static final String REPOSITORY_NAME = "allure-framework/allure2";
     private static final String ISSUE_NUMBER_ID = "#issue_1264";
     private static final int ISSUE_NUMBER = 1264;
+    private static final String FINDTEXT = "Issues";
+
     private GithubSteps steps = new GithubSteps();
 
     @Test
@@ -30,7 +32,7 @@ class GithubCheckIssueTests {
                 .pressEnter();
 
         $(By.linkText(REPOSITORY_NAME)).click();
-        $(withText("Issues")).click();
+        $(withText(FINDTEXT)).click();
         $(ISSUE_NUMBER_ID).should(Condition.visible);
     }
 
@@ -51,7 +53,7 @@ class GithubCheckIssueTests {
             $(By.linkText(REPOSITORY_NAME)).click();
         });
         step("Go to the Issues section", () ->
-                $(withText("Issues")).click()
+                $(withText(FINDTEXT)).click()
         );
         step("Verify the issue with " + ISSUE_NUMBER_ID + " is visible",
                 (s) -> {
